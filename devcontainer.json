@@ -1,0 +1,41 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "ros",
+
+	"build": {
+		"dockerfile": "../tools/Dockerfile",
+		"args": {
+			"WORKSPACE_PATH" : "/workspaces/${localWorkspaceFolderBasename}",
+			"TARGET" : "${localEnv:TARGET}",
+			"USERNAME" : "ros"
+		}
+	},
+
+	"extensions": [
+		"cschlosser.doxdocgen",
+		"ms-vscode.cmake-tools",
+		"ms-vscode.cpptools",
+		"ms-vscode.cpptools-extension-pack",
+		"ms-vscode.cpptools-themes",
+		"spadin.memento-inputs",
+		"ms-iot.vscode-ros",
+		"augustocdias.tasks-shell-input"],
+
+    "initializeCommand": "TARGET=$(cat .target)",
+
+	"postCreateCommand": 
+		"DEBIAN_FRONTEND=noninteractive tools/setup/setup_workspace.sh",
+	
+	"remoteUser": "ros",
+	"runArgs": [
+		"--network=host",
+		"--privileged",
+		"--cap-add=SYS_PTRACE",
+		"--security-opt=seccomp:unconfined",
+		"--security-opt=apparmor:unconfined",
+		"--volume=/tmp/.X11-unix:/tmp/.X11-unix",
+		"--cap-add=SYS_ADMIN",
+		"--cap-add=NET_ADMIN"
+	],
+	"containerEnv": { "DISPLAY": "${localEnv:DISPLAY}" }
+}
